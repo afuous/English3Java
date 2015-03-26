@@ -1,0 +1,19 @@
+print "How many primes would you like to find?"
+input number total
+define found as 0
+define num as 2
+while found is less than total
+	define prime as true
+	define factor as 2
+	while factor is less than num
+		if factor divides num
+			set prime to false
+		end
+		increment factor
+	end
+	if prime
+		print num
+		increment found
+	end
+	increment num
+end
