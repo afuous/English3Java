@@ -16,10 +16,12 @@ Run with `ruby e3j.rb english.txt JavaClass`. This will read the English from `e
 * `subtract y from x` -> `x -= y`
 * `multiply x by y` -> `x *= y`
 * `divide x by y` -> `x /= y`
-* `if condition ... end` -> `if(condition) { ... }`
-* `unless condition ... end` -> `if(!condition) { ... }`
-* `while condition ... end` -> `while(condition) { ... }`
-* `until condition ... end` -> `while(!condition) { ... }`
+* `if condition ...` -> `if(condition) { ... }`
+* `unless condition ...` -> `if(!condition) { ... }`
+* `while condition ...` -> `while(condition) { ... }`
+* `until condition ...` -> `while(!condition) { ... }`
+* `otherwise ...` -> `else { ... }`
+* `otherwise if condition ...` -> `else if(condition) { ... }`
 
 #### Conditions
 * `x` -> `x` for booleans
