@@ -8,12 +8,8 @@ while found is less than total
 	while factor is less than num
 		if factor divides num
 			set prime to false
-		end
 		increment factor
-	end
 	if prime
 		print num
 		increment found
-	end
 	increment num
-end

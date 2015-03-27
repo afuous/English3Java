@@ -3,9 +3,9 @@ def e3j(lines)
 	i = 0
 	while i < lines.size
 		line = lines[i]
-		words = line.split(/\s+/)
+		words = line.strip.split(/\s+/)
 		if words[0] == "print"
-			result += "System.out.println(" + line[6..-1] + ");"
+			result += "System.out.println(" + words[1..-1].join(" ") + ");"
 		elsif words[0] == "negate"
 			result += words[1] + "=!" + words[1] + ";"
 		elsif words[0] == "increment"
@@ -30,25 +30,34 @@ def e3j(lines)
 		elsif [words[0], words[2]] == ["divide", "by"]
 			result += words[1] + "/=" + words[3] + ";"
 		elsif words[0] == "if"
-			ending = matchingEnd(lines, i)
-			result += "if(" + condition(words[1..-1]) + "){" + e3j(lines[i + 1...ending]) + "}"
-			i = ending
+			ending = blockEnd(lines, i)
+			result += "if(" + condition(words[1..-1]) + "){\n" + e3j(lines[i + 1...ending]) + "}"
+			i = ending - 1
 		elsif words[0] == "unless"
-			ending = matchingEnd(lines, i)
-			result += "if(!(" + condition(words[1..-1]) + ")){" + e3j(lines[i + 1...ending]) + "}"
-			i = ending
+			ending = blockEnd(lines, i)
+			result += "if(!(" + condition(words[1..-1]) + ")){\n" + e3j(lines[i + 1...ending]) + "}"
+			i = ending - 1
 		elsif words[0] == "while"
-			ending = matchingEnd(lines, i)
-			result += "while(" + condition(words[1..-1]) + "){" + e3j(lines[i + 1...ending]) + "}"
-			i = ending
+			ending = blockEnd(lines, i)
+			result += "while(" + condition(words[1..-1]) + "){\n" + e3j(lines[i + 1...ending]) + "}"
+			i = ending - 1
 		elsif words[0] == "until"
-			ending = matchingEnd(lines, i)
-			result += "while(!(" + condition(words[1..-1]) + ")){" + e3j(lines[i + 1...ending]) + "}"
-			i = ending
+			ending = blockEnd(lines, i)
+			result += "while(!(" + condition(words[1..-1]) + ")){\n" + e3j(lines[i + 1...ending]) + "}"
+			i = ending - 1
+		elsif words == ["otherwise"]
+			ending = blockEnd(lines, i)
+			result += "else{\n" + e3j(lines[i + 1...ending]) + "}"
+			i = ending - 1
+		elsif words[0..1] == ["otherwise", "if"]
+			ending = blockEnd(lines, i)
+			result += "else if(" + condition(words[2..-1]) + "){\n" + e3j(lines[i + 1...ending]) + "}"
+			i = ending - 1
 		else
-			abort "error"
+			abort "error on the following line:\n" + line
 		end
 		i += 1
+		result += "\n"
 	end
 	return result
 end
@@ -59,15 +68,14 @@ def getType(str)
 	return "int"
 end
 
-def matchingEnd(lines, index)
-	count = 0
+def blockEnd(lines, index)
+	indents = lines[index].chars.index {|c| c != "\t"}
+	index += 1
 	while index < lines.size
-		count += 1 if ["if", "unless", "while", "until"].index {|str| lines[index].start_with?(str)}
-		count -= 1 if lines[index] == "end"
-		return index if count == 0
+		return index if lines[index].chars.index {|c| c != "\t"} <= indents
 		index += 1
 	end
-	abort "need end"
+	return lines.size
 end
 
 def condition(words)
@@ -85,7 +93,7 @@ def condition(words)
 	elsif words[1] == "divides"
 		return words[2] + "%" + words[0] + "==0"
 	else
-		abort "error"
+		abort "error on the following condition:\n" + words.join(" ")
 	end
 end
 
@@ -97,4 +105,4 @@ public static boolean equal(int x, int y) {return x==y;}
 public static boolean equal(String x, String y) {return x.equals(y);}
 public static boolean equal(boolean x, boolean y) {return x==y;}
 public static void main(String[] $){
-" + e3j(File.read(input).downcase.split($/).map(&:strip).select {|line| line.size > 0}) + "}}")
+" + e3j(File.read(input).downcase.split($/).map(&:rstrip).select {|line| line.size > 0}) + "}}")

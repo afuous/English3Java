@@ -5,15 +5,10 @@ define num as 1
 while num is less than input
 	if num divides input
 		add num to sum
-	end
 	add 1 to num
-end
 if sum is greater than input
 	print "abundant"
-end
-if sum equals input
+otherwise if sum equals input
 	print "perfect"
-end
-if sum is less than input
+otherwise
 	print "deficient"
-end
