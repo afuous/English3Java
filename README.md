@@ -11,7 +11,7 @@ Run with `ruby e3j.rb english.txt JavaClass`. This will read the English from `e
 * `increment x` => `x++`
 * `decrement x` => `x--`
 * `input string x` => `String x = new java.util.Scanner(System.in).nextLine()`
-* `input number x` => `int x = new java.util.Scanner(System.in).nextLine()`
+* `input number x` => `int x = new java.util.Scanner(System.in).nextInt()`
 * `add y to x` => `x += y`
 * `subtract y from x` => `x -= y`
 * `multiply x by y` => `x *= y`
